@@ -1,0 +1,201 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+os.chdir('C:\\Users\\Swaraj Chede\\Downloads\\Python Assignment 2 (2)')
+
+data=pd.read_csv("HousingData.csv")
+
+data.head()
+
+data.shape
+
+data.isnull().sum()
+
+data=data.fillna(data.mean())
+
+data.isnull().sum()
+
+data.nunique()
+
+data.dtypes
+
+plt.figure(figsize=(10,5))
+sns.distplot(data.CRIM)
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+y=data['MEDV']
+
+sns.distplot(y, hist=True);
+fig = plt.figure()
+res = stats.probplot(y, plot=plt)
+
+plt.figure(figsize=(15,5))
+sns.boxplot(data.PTRATIO)
+
+
+plt.figure(figsize=(15,5))
+sns.boxplot(data.MEDV)
+
+
+fig, axs = plt.subplots(ncols=7, nrows=2, figsize=(20, 10))
+index = 0
+axs = axs.flatten()
+for k,v in data.items():
+    sns.boxplot(y=k, data=data, ax=axs[index])
+    index += 1
+plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=5.0)
+
+
+sns.distplot(data.LSTAT)
+
+data.columns
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.ZN)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.INDUS)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.NOX)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.RM)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.AGE)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.DIS)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.RAD)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.TAX)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.B)
+
+plt.figure(figsize=(15,5))
+sns.distplot(data.MEDV)
+
+sns.countplot(x='CHAS',data=data)
+
+data.head()
+
+data.describe()
+
+plt.figure(figsize=(20, 10))
+sns.heatmap(data.corr().abs(),  annot=True)
+
+
+import pandas as pd
+import pandas_profiling as pp 
+profile = pp.ProfileReport(data) 
+profile
+
+!pip install pandas-profiling
+
+data.columns
+
+data_cells=['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX', 'DIS', 'AGE']
+x=data.loc[:,data_cells]
+y=data['MEDV']
+sns.scatterplot(x= data['LSTAT'],y=data['MEDV'],data=data)
+
+
+
+sns.scatterplot(x=data['NOX'],y=data['MEDV'],data=data)
+
+sns.scatterplot(x= data['INDUS'],y=data['MEDV'],data=data)
+
+X = data.iloc[:, 0:13].values
+y = data.iloc[:, 13].values.reshape(-1,1)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 25)
+
+print("Shape of X_train: ",X_train.shape)
+print("Shape of X_test: ", X_test.shape)
+print("Shape of y_train: ",y_train.shape)
+print("Shape of y_test",y_test.shape)
+
+# Linear Regression
+
+from sklearn.linear_model import LinearRegression
+regressor_linear = LinearRegression()
+
+regressor_linear.fit(X_train, y_train)
+
+from sklearn.metrics import r2_score
+
+
+y_pred_linear_train = regressor_linear.predict(X_train)
+r2_score_linear_train = r2_score(y_train, y_pred_linear_train)
+
+y_pred_linear_test = regressor_linear.predict(X_test)
+r2_score_linear_test = r2_score(y_test, y_pred_linear_test)
+
+print('R2_score (train): ', r2_score_linear_train)
+print('R2_score (test): ', r2_score_linear_test)
+
+plt.scatter(y_train, y_pred_linear_train)
+plt.xlabel("Prices")
+plt.ylabel("y_pred_linear_train")
+plt.title("Prices vs y_pred")
+plt.show()
+
+plt.scatter(y_train, y_pred_linear_train)
+plt.xlabel("MEDV")
+plt.ylabel("y_pred_linear_train")
+plt.title("Prices vs y_pred")
+plt.show()
+
+# Decision tree regression
+
+
+# Fitting the Decision Tree Regression Model to the dataset
+from sklearn.tree import DecisionTreeRegressor
+regressor_dt = DecisionTreeRegressor(random_state = 42)
+regressor_dt.fit(X_train, y_train)
+
+from sklearn.metrics import r2_score
+
+
+# Predicting R2 Score the Train set results
+y_pred_dt_train = regressor_dt.predict(X_train)
+r2_score_dt_train = r2_score(y_train, y_pred_dt_train)
+
+# Predicting R2 Score the Test set results
+y_pred_dt_test = regressor_dt.predict(X_test)
+r2_score_dt_test = r2_score(y_test, y_pred_dt_test)
+
+
+print('R2_score (train): ', r2_score_dt_train)
+print('R2_score (test): ', r2_score_dt_test)
+
+# Fitting the Random Forest Regression to the dataset
+from sklearn.ensemble import RandomForestRegressor
+regressor_rf = RandomForestRegressor(n_estimators = 500, random_state = 0)
+regressor_rf.fit(X_train, y_train.ravel())
+
+from sklearn.metrics import r2_score
+
+
+# Predicting R2 Score the Train set results
+y_pred_rf_train = regressor_rf.predict(X_train)
+r2_score_rf_train = r2_score(y_train, y_pred_rf_train)
+
+# Predicting R2 Score the Test set results
+y_pred_rf_test = regressor_rf.predict(X_test)
+r2_score_rf_test = r2_score(y_test, y_pred_rf_test)
+
+print('R2_score (train): ', r2_score_rf_train)
+print('R2_score (test): ', r2_score_rf_test)
